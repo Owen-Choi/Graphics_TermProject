@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Spaceships Pew Pew</title>
+  <script type="text/javascript" src="./src/three.min.js"></script>
+  <script type="text/javascript" src="./src/OrbitControls.js"></script>
+  <script src="./src/Detector.js"></script>
+  <script src="./src/Stats.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Teko:wght@300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="base.css">
+  <link rel="short icon" href="#">
+</head>
+<body>
+  <div id="ThreeJS" style="position: absolute; left:0px; top:0px"></div>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/three@0.112.1/build/three.module.js"></script>
+  <div id="target"></div>
+  <script id="vertexShader" type="x-shader/x-vertex">
+    uniform sampler2D bumpTexture;
+    uniform float bumpScale;
+    
+    varying float vAmount;
+    varying vec2 vUV;
+    
+    void main() 
+    { 
+      vUV = uv;
+      vec4 bumpData = texture2D( bumpTexture, uv );
+      
+      vAmount = bumpData.r; // assuming map is grayscale it doesn't matter if you use r, g, or b.
+      
+      // move the position along the normal
+        vec3 newPosition = position + normal * bumpScale * vAmount;
+      
+      gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
+    }
+    </script>
+    
+    <!-- fragment shader a.k.a. pixel shader -->
+    <script id="fragmentShader" type="x-shader/x-vertex"> 
+    uniform sampler2D oceanTexture;
+    uniform sampler2D sandyTexture;
+    uniform sampler2D grassTexture;
+    uniform sampler2D rockyTexture;
+    uniform sampler2D snowyTexture;
+    
+    varying vec2 vUV;
+    
+    varying float vAmount;
+    
+    void main() 
+    {
+      vec4 water = (smoothstep(0.01, 0.25, vAmount) - smoothstep(0.24, 0.26, vAmount)) * texture2D( oceanTexture, vUV * 10.0 );
+      vec4 sandy = (smoothstep(0.24, 0.27, vAmount) - smoothstep(0.28, 0.31, vAmount)) * texture2D( sandyTexture, vUV * 10.0 );
+      vec4 grass = (smoothstep(0.28, 0.32, vAmount) - smoothstep(0.35, 0.40, vAmount)) * texture2D( grassTexture, vUV * 20.0 );
+      vec4 rocky = (smoothstep(0.30, 0.50, vAmount) - smoothstep(0.40, 0.70, vAmount)) * texture2D( rockyTexture, vUV * 20.0 );
+      vec4 snowy = (smoothstep(0.50, 0.65, vAmount))                                   * texture2D( snowyTexture, vUV * 10.0 );
+      gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0) + water + sandy + grass + rocky + snowy; //, 1.0);
+    }
+  </script>
+  <script>
+    var container, scene, camera, renderer, controls, stats;
+    init();
+    function init(){
+      // SCENE
+      scene = new THREE.Scene();
+      // var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
+      // var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20000;
+      // camera = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR);
+      // scene.add(camera);
+      // camera.position.set(0,100,400);
+      // camera.lookAt(scene.position);	
+      // RENDERER
+      if ( Detector.webgl ){
+        renderer = new THREE.WebGLRenderer( {antialias:true} );
+      }
+      else{
+        renderer = new THREE.CanvasRenderer();
+      }
+      renderer.setSize(window.innerWidth,window.innerHeight-150);
+      // FLOOR
+      // texture used to generate "bumpiness"
+      var bumpTexture = new THREE.ImageUtils.loadTexture( 'resources/another_heightmap.png' );
+      bumpTexture.wrapS = bumpTexture.wrapT = THREE.RepeatWrapping; 
+      // magnitude of normal displacement
+      var bumpScale   = 200.0;
+      
+      var oceanTexture = new THREE.ImageUtils.loadTexture( 'resources/dirt-512.jpg' );
+      oceanTexture.wrapS = oceanTexture.wrapT = THREE.RepeatWrapping; 
+      
+      var sandyTexture = new THREE.ImageUtils.loadTexture( 'resources/sand-512.jpg' );
+      sandyTexture.wrapS = sandyTexture.wrapT = THREE.RepeatWrapping; 
+      
+      var grassTexture = new THREE.ImageUtils.loadTexture( 'resources/coast_sand_rocks.jpg' );
+      grassTexture.wrapS = grassTexture.wrapT = THREE.RepeatWrapping; 
+      
+      var rockyTexture = new THREE.ImageUtils.loadTexture( 'resources/coast_rocks.png' );
+      rockyTexture.wrapS = rockyTexture.wrapT = THREE.RepeatWrapping; 
+      
+      var snowyTexture = new THREE.ImageUtils.loadTexture( 'resources/snow-512.jpg' );
+      snowyTexture.wrapS = snowyTexture.wrapT = THREE.RepeatWrapping; 
+
+      
+      // use "this." to create global object
+      this.customUniforms = {
+        bumpTexture:	{ type: "t", value: bumpTexture },
+        bumpScale:	    { type: "f", value: bumpScale },
+        oceanTexture:	{ type: "t", value: oceanTexture },
+        sandyTexture:	{ type: "t", value: sandyTexture },
+        grassTexture:	{ type: "t", value: grassTexture },
+        rockyTexture:	{ type: "t", value: rockyTexture },
+        snowyTexture:	{ type: "t", value: snowyTexture },
+      };
+      
+  }
+  </script>
+  <script src="./src/main.js" type="module">
+    
+  </script>
+</body>
+</html>
