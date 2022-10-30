@@ -83,12 +83,15 @@ class PlayerEntity {
     return (this._health <= 0.0);
   }
 
+  // 지형에 충돌이 감지되면 TakeDamage로 오브젝트 파괴
   TakeDamage(dmg) {
     this._params.game._entities['_explosionSystem'].Splode(this.Position);
 
     this._health -= dmg;
     if (this._health <= 0.0) {
-      this._game._visibilityGrid.RemoveItem(this._model.uuid, this._game._visibilityIndex);
+      // 여기서 게임을 바로 끝내야 할듯 합니다. 두번째 parameter this._game.visibilityIndex가 iterative가 아니라고 오류가 발생하네요.
+      // this._game._visibilityGrid.RemoveItem(this._model.uuid, this._game._visibilityIndex);
+      console.log("게임 종료");
     }    
   }
 
@@ -518,32 +521,32 @@ class ProceduralTerrain_Demo extends game.Game {
   }
 
   _CreateGUI() {
-    this._CreateGameGUI();
+    // this._CreateGameGUI();
     this._CreateControlGUI();
   }
 
-  _CreateGameGUI() {
-    const guiDiv = document.createElement('div');
-    guiDiv.className = 'guiRoot guiBox';
-
-    const scoreDiv = document.createElement('div');
-    scoreDiv.className = 'vertical';
-
-    const scoreTitle = document.createElement('div');
-    scoreTitle.className = 'guiBigText';
-    scoreTitle.innerText = 'KILLS';
-
-    const scoreText = document.createElement('div');
-    scoreText.className = 'guiSmallText';
-    scoreText.innerText = '0';
-    scoreText.id = 'scoreText';
-
-    scoreDiv.appendChild(scoreTitle);
-    scoreDiv.appendChild(scoreText);
-
-    guiDiv.appendChild(scoreDiv);
-    document.body.appendChild(guiDiv);
-  }
+  // _CreateGameGUI() {
+  //   const guiDiv = document.createElement('div');
+  //   guiDiv.className = 'guiRoot guiBox';
+  //
+  //   const scoreDiv = document.createElement('div');
+  //   scoreDiv.className = 'vertical';
+  //
+  //   const scoreTitle = document.createElement('div');
+  //   scoreTitle.className = 'guiBigText';
+  //   scoreTitle.innerText = 'KILLS';
+  //
+  //   const scoreText = document.createElement('div');
+  //   scoreText.className = 'guiSmallText';
+  //   scoreText.innerText = '0';
+  //   scoreText.id = 'scoreText';
+  //
+  //   scoreDiv.appendChild(scoreTitle);
+  //   scoreDiv.appendChild(scoreText);
+  //
+  //   guiDiv.appendChild(scoreDiv);
+  //   document.body.appendChild(guiDiv);
+  // }
 
   _CreateControlGUI() {
     this._guiParams = {
