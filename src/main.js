@@ -518,32 +518,32 @@ class ProceduralTerrain_Demo extends game.Game {
   }
 
   _CreateGUI() {
-    this._CreateGameGUI();
+    // this._CreateGameGUI();
     this._CreateControlGUI();
   }
 
-  _CreateGameGUI() {
-    const guiDiv = document.createElement('div');
-    guiDiv.className = 'guiRoot guiBox';
-
-    const scoreDiv = document.createElement('div');
-    scoreDiv.className = 'vertical';
-
-    const scoreTitle = document.createElement('div');
-    scoreTitle.className = 'guiBigText';
-    scoreTitle.innerText = 'KILLS';
-
-    const scoreText = document.createElement('div');
-    scoreText.className = 'guiSmallText';
-    scoreText.innerText = '0';
-    scoreText.id = 'scoreText';
-
-    scoreDiv.appendChild(scoreTitle);
-    scoreDiv.appendChild(scoreText);
-
-    guiDiv.appendChild(scoreDiv);
-    document.body.appendChild(guiDiv);
-  }
+  // _CreateGameGUI() {
+  //   const guiDiv = document.createElement('div');
+  //   guiDiv.className = 'guiRoot guiBox';
+  //
+  //   const scoreDiv = document.createElement('div');
+  //   scoreDiv.className = 'vertical';
+  //
+  //   const scoreTitle = document.createElement('div');
+  //   scoreTitle.className = 'guiBigText';
+  //   scoreTitle.innerText = 'KILLS';
+  //
+  //   const scoreText = document.createElement('div');
+  //   scoreText.className = 'guiSmallText';
+  //   scoreText.innerText = '0';
+  //   scoreText.id = 'scoreText';
+  //
+  //   scoreDiv.appendChild(scoreTitle);
+  //   scoreDiv.appendChild(scoreText);
+  //
+  //   guiDiv.appendChild(scoreDiv);
+  //   document.body.appendChild(guiDiv);
+  // }
 
   _CreateControlGUI() {
     this._guiParams = {

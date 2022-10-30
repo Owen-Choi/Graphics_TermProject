@@ -421,7 +421,7 @@ export const controls = (function() {
         _R.multiply(_Q);
       }
       if (this._move.rocket) {
-        velocity.z -= this._acceleration.x * timeInSeconds;
+        velocity.z -= this._acceleration.x * timeInSeconds * 4;
       }
 
       controlObject._model.quaternion.copy(_R);
