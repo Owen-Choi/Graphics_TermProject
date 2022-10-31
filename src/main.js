@@ -21,6 +21,10 @@ const _NUM_BOIDS = 1;
 const _BOID_SPEED = 0;
 const _BOID_ACCELERATION = _BOID_SPEED / 2.5;
 const _BOID_FORCE_MAX = _BOID_ACCELERATION / 20.0;
+let collidableMeshList = [];
+var cubeGeometry = new THREE.CubeGeometry(5,5,5,1,1,1);
+var wireMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe:true } );
+var MovingCube = new THREE.Mesh( cubeGeometry, wireMaterial );
 // const _BOID_FORCE_ORIGIN = 50;
 // const _BOID_FORCE_ALIGNMENT = 10;
 // const _BOID_FORCE_SEPARATION = 20;
@@ -37,6 +41,9 @@ class PlayerEntity {
     this._velocity = new THREE.Vector3(0, 0, 0);
     this._direction = new THREE.Vector3(0, 0, -1);
     this._health = 1000.0;
+
+    MovingCube.position.set(this._model.position);
+
 
     const x = 2.75;
     const y1 = 1.5;
@@ -83,7 +90,7 @@ class PlayerEntity {
     return (this._health <= 0.0);
   }
 
-  // 지형에 충돌이 감지되면 TakeDamage로 오브젝트 파괴
+  // 지형에 충돌이 감지되면 TakeDamage로 오브젝트 파괴 예정
   TakeDamage(dmg) {
     this._params.game._entities['_explosionSystem'].Splode(this.Position);
 
@@ -91,7 +98,7 @@ class PlayerEntity {
     if (this._health <= 0.0) {
       // 여기서 게임을 바로 끝내야 할듯 합니다. 두번째 parameter this._game.visibilityIndex가 iterative가 아니라고 오류가 발생하네요.
       // this._game._visibilityGrid.RemoveItem(this._model.uuid, this._game._visibilityIndex);
-      console.log("게임 종료");
+      // console.log("게임 종료");
     }    
   }
 
@@ -121,6 +128,23 @@ class PlayerEntity {
   Update(timeInSeconds) {
     if (this.Dead) {
       return;
+    }
+
+    MovingCube.position.set(this._model.position);
+    console.log(MovingCube.position.x + " : " + this._model.position.x);
+    var originPoint = this._model.position.clone();
+
+    for (var vertexIndex = 0; vertexIndex < cubeGeometry.vertices.length; vertexIndex++)
+    {
+      var localVertex = MovingCube.geometry.vertices[vertexIndex].clone();
+      var globalVertex = localVertex.applyMatrix4( MovingCube.matrix );
+      var directionVector = globalVertex.sub( MovingCube.position );
+
+      var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
+      var collisionResults = ray.intersectObjects( collidableMeshList );
+      // console.log(collidableMeshList);
+      if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() )
+        console.log("detected");
     }
 
     this._visibilityIndex = this._game._visibilityGrid.UpdateItem(
@@ -272,6 +296,7 @@ class ProceduralTerrain_Demo extends game.Game {
       
     var planeGeo = new THREE.PlaneGeometry( 5000, 5000, 100, 100 );
     var plane = new THREE.Mesh(	planeGeo, customMaterial );
+    collidableMeshList.push(plane);
     // plane.rotation.x = -Math.PI / 2;
     // plane.position.y = -100;
     plane.rotation.x = -Math.PI / 2;
@@ -286,6 +311,7 @@ class ProceduralTerrain_Demo extends game.Game {
     waterTex.repeat.set(5,5);
     var waterMat = new THREE.MeshBasicMaterial( {map: waterTex, transparent:true, opacity:0.40} );
     var water = new THREE.Mesh(	planeGeo, waterMat );
+    collidableMeshList.push(water);
     // water.rotation.x = -Math.PI / 2;
     // water.position.y = -50;
     water.rotation.x = -Math.PI / 2;
@@ -293,6 +319,30 @@ class ProceduralTerrain_Demo extends game.Game {
     water.position.y=-30;
     water.position.z=0;
     this._graphics.Scene.add( water);
+    this._graphics.Scene.add(MovingCube);
+
+    var wallGeometry = new THREE.CubeGeometry( 100, 100, 20, 1, 1, 1 );
+    var wallMaterial = new THREE.MeshBasicMaterial( {color: 0x8888ff} );
+    var wireMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe:true } );
+
+    var wall = new THREE.Mesh(wallGeometry, wallMaterial);
+    wall.position.set(100, 50, -100);
+    this._graphics.Scene.add(wall);
+    collidableMeshList.push(wall);
+    var wall = new THREE.Mesh(wallGeometry, wireMaterial);
+    wall.position.set(100, 50, -100);
+    this._graphics.Scene.add(wall);
+
+    var wall2 = new THREE.Mesh(wallGeometry, wallMaterial);
+    wall2.position.set(8000, -100, 0);
+    wall2.rotation.y = 3.14159 / 2;
+    this._graphics.Scene.add(wall2);
+    collidableMeshList.push(wall2);
+    var wall2 = new THREE.Mesh(wallGeometry, wireMaterial);
+    wall2.position.set(8000, -100, 0);
+    wall2.rotation.y = 3.14159 / 2;
+    this._graphics.Scene.add(wall2);
+
     loader.setPath('./resources/models/x-wing/');
     loader.load('scene.gltf', (gltf) => {
       model = gltf.scene.children[0];

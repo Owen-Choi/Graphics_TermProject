@@ -421,7 +421,7 @@ export const controls = (function() {
         _R.multiply(_Q);
       }
       if (this._move.rocket) {
-        this._params.target.TakeDamage(100);
+        // this._params.target.TakeDamage(100);
         velocity.z -= this._acceleration.x * timeInSeconds * 4;
       }
 
