@@ -25,6 +25,7 @@ let collidableMeshList = [];
 var cubeGeometry = new THREE.CubeGeometry(5,5,5,1,1,1);
 var wireMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe:true } );
 var MovingCube = new THREE.Mesh( cubeGeometry, wireMaterial );
+var cnt = 0;
 // const _BOID_FORCE_ORIGIN = 50;
 // const _BOID_FORCE_ALIGNMENT = 10;
 // const _BOID_FORCE_SEPARATION = 20;
@@ -42,8 +43,7 @@ class PlayerEntity {
     this._direction = new THREE.Vector3(0, 0, -1);
     this._health = 1000.0;
 
-    MovingCube.position.set(this._model.position);
-
+    // MovingCube.position.set(this._model.position);
 
     const x = 2.75;
     const y1 = 1.5;
@@ -57,7 +57,6 @@ class PlayerEntity {
     ];
 
     this._offsetIndex = 0;
-
     this._visibilityIndex = this._game._visibilityGrid.UpdateItem(
         this._model.uuid, this);
   }
@@ -98,7 +97,7 @@ class PlayerEntity {
     if (this._health <= 0.0) {
       // 여기서 게임을 바로 끝내야 할듯 합니다. 두번째 parameter this._game.visibilityIndex가 iterative가 아니라고 오류가 발생하네요.
       // this._game._visibilityGrid.RemoveItem(this._model.uuid, this._game._visibilityIndex);
-      // console.log("게임 종료");
+      console.log("게임 종료");
     }    
   }
 
@@ -106,9 +105,6 @@ class PlayerEntity {
     if (this._fireCooldown > 0.0) {
       return;
     }
-
-    // console.log(MovingCube.position.x + " : " + this._model.position.x);
-    // console.log(this._model.position.clone())
 
     this._fireCooldown = 0.05;
 
@@ -135,22 +131,29 @@ class PlayerEntity {
 
     // MovingCube.position.set(this._model.position);
     MovingCube.position.x = this._model.position.x;
-    MovingCube.position.y = this._model.position.y;
+    MovingCube.position.y = this._model.position.y + 1.5;
     MovingCube.position.z = this._model.position.z;
-    // console.log(MovingCube.position.x + " : " + this._model.position.x);
     var originPoint = this._model.position.clone();
+    // var originPoint = MovingCube.clone();
 
     for (var vertexIndex = 0; vertexIndex < cubeGeometry.vertices.length; vertexIndex++)
     {
       var localVertex = MovingCube.geometry.vertices[vertexIndex].clone();
       var globalVertex = localVertex.applyMatrix4( MovingCube.matrix );
       var directionVector = globalVertex.sub( this._model.position.clone() );
+      // var directionVector = globalVertex.sub( MovingCube.clone() );
 
       var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
       var collisionResults = ray.intersectObjects( collidableMeshList );
-      // console.log(collidableMeshList);
-      if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() )
-        console.log("detected");
+
+      if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) {
+        console.log("collision detected");
+        // 처음에 gltf 모델을 인식해서 그런지 8번은 불가피하게 충돌로 판정이 됩니다.
+        // 그때 게임이 종료되는 것을 막기 위해 최초 8번의 충돌은 무효로 처리합니다.
+        cnt++ > 8 ? this.TakeDamage(1000) : {};
+
+        // this.TakeDamage(1000);
+      }
     }
 
     this._visibilityIndex = this._game._visibilityGrid.UpdateItem(
@@ -235,7 +238,7 @@ class ProceduralTerrain_Demo extends game.Game {
     this._userCamera = new THREE.Object3D();
     this._userCamera.position.set(4100, 0, 0);
 
-    this._graphics.Camera.position.set(10500, 0, -2130);
+    this._graphics.Camera.position.set(10500, 300, -2130);
     this._graphics.Camera.quaternion.set(-0.032, 0.885, 0.062, 0.46);
 
     this._score = 0;
@@ -302,13 +305,13 @@ class ProceduralTerrain_Demo extends game.Game {
       
     var planeGeo = new THREE.PlaneGeometry( 5000, 5000, 100, 100 );
     var plane = new THREE.Mesh(	planeGeo, customMaterial );
-    collidableMeshList.push(plane);
     // plane.rotation.x = -Math.PI / 2;
     // plane.position.y = -100;
     plane.rotation.x = -Math.PI / 2;
     plane.position.x=8000;
     plane.position.y=-100;
     plane.position.z=0;
+    collidableMeshList.push(plane);
     this._graphics.Scene.add( plane );
 
     var waterGeo = new THREE.PlaneGeometry( 5000, 5000, 1, 1 );
@@ -317,18 +320,18 @@ class ProceduralTerrain_Demo extends game.Game {
     waterTex.repeat.set(5,5);
     var waterMat = new THREE.MeshBasicMaterial( {map: waterTex, transparent:true, opacity:0.40} );
     var water = new THREE.Mesh(	planeGeo, waterMat );
-    collidableMeshList.push(water);
     // water.rotation.x = -Math.PI / 2;
     // water.position.y = -50;
     water.rotation.x = -Math.PI / 2;
     water.position.x=8000;
     water.position.y=-30;
     water.position.z=0;
+    collidableMeshList.push(water);
     this._graphics.Scene.add( water);
     this._graphics.Scene.add(MovingCube);
 
-    var wallGeometry = new THREE.CubeGeometry( 100, 100, 20, 1, 1, 1 );
-    var wallMaterial = new THREE.MeshBasicMaterial( {color: 0x8888ff} );
+    var wallGeometry = new THREE.CubeGeometry( 500, 500, 100, 1, 1, 1 );
+    var wallMaterial = new THREE.MeshBasicMaterial( {color: 0x0000ff, opacity: 0, transparent: true} );
     var wireMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe:true } );
 
     var wall = new THREE.Mesh(wallGeometry, wallMaterial);
