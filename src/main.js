@@ -22,9 +22,10 @@ const _BOID_SPEED = 0;
 const _BOID_ACCELERATION = _BOID_SPEED / 2.5;
 const _BOID_FORCE_MAX = _BOID_ACCELERATION / 20.0;
 let collidableMeshList = [];
-var cubeGeometry = new THREE.CubeGeometry(2.5,2.5,2.5,1,1,1);
+var cubeGeometry = new THREE.CubeGeometry(5,5,5,1,1,1);
 var wireMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe:true } );
 var MovingCube = new THREE.Mesh( cubeGeometry, wireMaterial );
+var cnt = 0;
 // const _BOID_FORCE_ORIGIN = 50;
 // const _BOID_FORCE_ALIGNMENT = 10;
 // const _BOID_FORCE_SEPARATION = 20;
@@ -35,7 +36,6 @@ var MovingCube = new THREE.Mesh( cubeGeometry, wireMaterial );
 class PlayerEntity {
   constructor(params) {
     this._model = params.model;
-    // this._model.position.y += 500;
     this._params = params;
     this._game = params.game;
     this._fireCooldown = 0.0;
@@ -43,8 +43,7 @@ class PlayerEntity {
     this._direction = new THREE.Vector3(0, 0, -1);
     this._health = 1000.0;
 
-    MovingCube.position.set(this._model.position);
-
+    // MovingCube.position.set(this._model.position);
 
     const x = 2.75;
     const y1 = 1.5;
@@ -58,7 +57,6 @@ class PlayerEntity {
     ];
 
     this._offsetIndex = 0;
-
     this._visibilityIndex = this._game._visibilityGrid.UpdateItem(
         this._model.uuid, this);
   }
@@ -136,19 +134,26 @@ class PlayerEntity {
     MovingCube.position.y = this._model.position.y + 1.5;
     MovingCube.position.z = this._model.position.z;
     var originPoint = this._model.position.clone();
+    // var originPoint = MovingCube.clone();
 
     for (var vertexIndex = 0; vertexIndex < cubeGeometry.vertices.length; vertexIndex++)
     {
       var localVertex = MovingCube.geometry.vertices[vertexIndex].clone();
       var globalVertex = localVertex.applyMatrix4( MovingCube.matrix );
       var directionVector = globalVertex.sub( this._model.position.clone() );
+      // var directionVector = globalVertex.sub( MovingCube.clone() );
 
       var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
       var collisionResults = ray.intersectObjects( collidableMeshList );
 
-      if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() )
-        console.log("collistion detected");
+      if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) {
+        console.log("collision detected");
+        // 처음에 gltf 모델을 인식해서 그런지 8번은 불가피하게 충돌로 판정이 됩니다.
+        // 그때 게임이 종료되는 것을 막기 위해 최초 8번의 충돌은 무효로 처리합니다.
+        cnt++ > 8 ? this.TakeDamage(1000) : {};
+
         // this.TakeDamage(1000);
+      }
     }
 
     this._visibilityIndex = this._game._visibilityGrid.UpdateItem(
@@ -233,7 +238,7 @@ class ProceduralTerrain_Demo extends game.Game {
     this._userCamera = new THREE.Object3D();
     this._userCamera.position.set(4100, 0, 0);
 
-    this._graphics.Camera.position.set(10500, 0, -2130);
+    this._graphics.Camera.position.set(10500, 300, -2130);
     this._graphics.Camera.quaternion.set(-0.032, 0.885, 0.062, 0.46);
 
     this._score = 0;
