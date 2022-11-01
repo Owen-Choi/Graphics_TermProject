@@ -22,7 +22,7 @@ const _BOID_SPEED = 0;
 const _BOID_ACCELERATION = _BOID_SPEED / 2.5;
 const _BOID_FORCE_MAX = _BOID_ACCELERATION / 20.0;
 let collidableMeshList = [];
-var cubeGeometry = new THREE.CubeGeometry(5,5,5,1,1,1);
+var cubeGeometry = new THREE.CubeGeometry(2.5,2.5,2.5,1,1,1);
 var wireMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe:true } );
 var MovingCube = new THREE.Mesh( cubeGeometry, wireMaterial );
 // const _BOID_FORCE_ORIGIN = 50;
@@ -35,6 +35,7 @@ var MovingCube = new THREE.Mesh( cubeGeometry, wireMaterial );
 class PlayerEntity {
   constructor(params) {
     this._model = params.model;
+    // this._model.position.y += 500;
     this._params = params;
     this._game = params.game;
     this._fireCooldown = 0.0;
@@ -98,7 +99,7 @@ class PlayerEntity {
     if (this._health <= 0.0) {
       // 여기서 게임을 바로 끝내야 할듯 합니다. 두번째 parameter this._game.visibilityIndex가 iterative가 아니라고 오류가 발생하네요.
       // this._game._visibilityGrid.RemoveItem(this._model.uuid, this._game._visibilityIndex);
-      // console.log("게임 종료");
+      console.log("게임 종료");
     }    
   }
 
@@ -106,9 +107,6 @@ class PlayerEntity {
     if (this._fireCooldown > 0.0) {
       return;
     }
-
-    // console.log(MovingCube.position.x + " : " + this._model.position.x);
-    // console.log(this._model.position.clone())
 
     this._fireCooldown = 0.05;
 
@@ -135,9 +133,8 @@ class PlayerEntity {
 
     // MovingCube.position.set(this._model.position);
     MovingCube.position.x = this._model.position.x;
-    MovingCube.position.y = this._model.position.y;
+    MovingCube.position.y = this._model.position.y + 1.5;
     MovingCube.position.z = this._model.position.z;
-    // console.log(MovingCube.position.x + " : " + this._model.position.x);
     var originPoint = this._model.position.clone();
 
     for (var vertexIndex = 0; vertexIndex < cubeGeometry.vertices.length; vertexIndex++)
@@ -148,9 +145,10 @@ class PlayerEntity {
 
       var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
       var collisionResults = ray.intersectObjects( collidableMeshList );
-      // console.log(collidableMeshList);
+
       if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() )
-        console.log("detected");
+        console.log("collistion detected");
+        // this.TakeDamage(1000);
     }
 
     this._visibilityIndex = this._game._visibilityGrid.UpdateItem(
@@ -302,13 +300,13 @@ class ProceduralTerrain_Demo extends game.Game {
       
     var planeGeo = new THREE.PlaneGeometry( 5000, 5000, 100, 100 );
     var plane = new THREE.Mesh(	planeGeo, customMaterial );
-    collidableMeshList.push(plane);
     // plane.rotation.x = -Math.PI / 2;
     // plane.position.y = -100;
     plane.rotation.x = -Math.PI / 2;
     plane.position.x=8000;
     plane.position.y=-100;
     plane.position.z=0;
+    collidableMeshList.push(plane);
     this._graphics.Scene.add( plane );
 
     var waterGeo = new THREE.PlaneGeometry( 5000, 5000, 1, 1 );
@@ -317,18 +315,18 @@ class ProceduralTerrain_Demo extends game.Game {
     waterTex.repeat.set(5,5);
     var waterMat = new THREE.MeshBasicMaterial( {map: waterTex, transparent:true, opacity:0.40} );
     var water = new THREE.Mesh(	planeGeo, waterMat );
-    collidableMeshList.push(water);
     // water.rotation.x = -Math.PI / 2;
     // water.position.y = -50;
     water.rotation.x = -Math.PI / 2;
     water.position.x=8000;
     water.position.y=-30;
     water.position.z=0;
+    collidableMeshList.push(water);
     this._graphics.Scene.add( water);
     this._graphics.Scene.add(MovingCube);
 
-    var wallGeometry = new THREE.CubeGeometry( 100, 100, 20, 1, 1, 1 );
-    var wallMaterial = new THREE.MeshBasicMaterial( {color: 0x8888ff} );
+    var wallGeometry = new THREE.CubeGeometry( 500, 500, 100, 1, 1, 1 );
+    var wallMaterial = new THREE.MeshBasicMaterial( {color: 0x0000ff, opacity: 0, transparent: true} );
     var wireMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe:true } );
 
     var wall = new THREE.Mesh(wallGeometry, wallMaterial);
