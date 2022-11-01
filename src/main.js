@@ -107,6 +107,9 @@ class PlayerEntity {
       return;
     }
 
+    // console.log(MovingCube.position.x + " : " + this._model.position.x);
+    // console.log(this._model.position.clone())
+
     this._fireCooldown = 0.05;
 
     const p = this._params.game._entities['_blasterSystem'].CreateParticle();
@@ -130,15 +133,18 @@ class PlayerEntity {
       return;
     }
 
-    MovingCube.position.set(this._model.position);
-    console.log(MovingCube.position.x + " : " + this._model.position.x);
+    // MovingCube.position.set(this._model.position);
+    MovingCube.position.x = this._model.position.x;
+    MovingCube.position.y = this._model.position.y;
+    MovingCube.position.z = this._model.position.z;
+    // console.log(MovingCube.position.x + " : " + this._model.position.x);
     var originPoint = this._model.position.clone();
 
     for (var vertexIndex = 0; vertexIndex < cubeGeometry.vertices.length; vertexIndex++)
     {
       var localVertex = MovingCube.geometry.vertices[vertexIndex].clone();
       var globalVertex = localVertex.applyMatrix4( MovingCube.matrix );
-      var directionVector = globalVertex.sub( MovingCube.position );
+      var directionVector = globalVertex.sub( this._model.position.clone() );
 
       var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
       var collisionResults = ray.intersectObjects( collidableMeshList );
@@ -342,7 +348,6 @@ class ProceduralTerrain_Demo extends game.Game {
     wall2.position.set(8000, -100, 0);
     wall2.rotation.y = 3.14159 / 2;
     this._graphics.Scene.add(wall2);
-
     loader.setPath('./resources/models/x-wing/');
     loader.load('scene.gltf', (gltf) => {
       model = gltf.scene.children[0];
