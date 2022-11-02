@@ -264,7 +264,7 @@ class ProceduralTerrain_Demo extends game.Game {
     var bumpTexture = new THREE.ImageUtils.loadTexture( 'resources/another_heightmap.png' );
     bumpTexture.wrapS = bumpTexture.wrapT = THREE.RepeatWrapping; 
     // magnitude of normal displacement
-    var bumpScale   = 200.0;
+    var bumpScale   = 400.0;
     
     var oceanTexture = new THREE.ImageUtils.loadTexture( 'resources/dirt-512.jpg' );
     oceanTexture.wrapS = oceanTexture.wrapT = THREE.RepeatWrapping; 
@@ -295,15 +295,15 @@ class ProceduralTerrain_Demo extends game.Game {
     
     // create custom material from the shader code above
     //   that is within specially labelled script tags
-    var customMaterial = new THREE.ShaderMaterial( 
+    var customMaterial = new THREE.ShaderMaterial(
     {
-        uniforms: customUniforms,
+      uniforms: customUniforms,
       vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
       fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
       // side: THREE.DoubleSide
     }   );
       
-    var planeGeo = new THREE.PlaneGeometry( 5000, 5000, 100, 100 );
+    var planeGeo = new THREE.PlaneGeometry( 10000, 10000, 100, 100 );
     var plane = new THREE.Mesh(	planeGeo, customMaterial );
     // plane.rotation.x = -Math.PI / 2;
     // plane.position.y = -100;
@@ -314,20 +314,20 @@ class ProceduralTerrain_Demo extends game.Game {
     collidableMeshList.push(plane);
     this._graphics.Scene.add( plane );
 
-    var waterGeo = new THREE.PlaneGeometry( 5000, 5000, 1, 1 );
-    var waterTex = new THREE.ImageUtils.loadTexture( 'resources/water512.jpg' );
-    waterTex.wrapS = waterTex.wrapT = THREE.RepeatWrapping; 
-    waterTex.repeat.set(5,5);
-    var waterMat = new THREE.MeshBasicMaterial( {map: waterTex, transparent:true, opacity:0.40} );
-    var water = new THREE.Mesh(	planeGeo, waterMat );
+    // var waterGeo = new THREE.PlaneGeometry( 10000, 10000, 1, 1 );
+    var iceTex = new THREE.ImageUtils.loadTexture( 'resources/ice.png' );
+    iceTex.wrapS = iceTex.wrapT = THREE.RepeatWrapping;
+    iceTex.repeat.set(5,5);
+    var iceMat = new THREE.MeshBasicMaterial( {map: iceTex, transparent:true, opacity:0.40} );
+    var ice = new THREE.Mesh(	planeGeo, iceMat );
     // water.rotation.x = -Math.PI / 2;
     // water.position.y = -50;
-    water.rotation.x = -Math.PI / 2;
-    water.position.x=8000;
-    water.position.y=-30;
-    water.position.z=0;
-    collidableMeshList.push(water);
-    this._graphics.Scene.add( water);
+    ice.rotation.x = -Math.PI / 2;
+    ice.position.x=8000;
+    ice.position.y=-30;
+    ice.position.z=0;
+    collidableMeshList.push(ice);
+    this._graphics.Scene.add( ice);
     this._graphics.Scene.add(MovingCube);
 
     var wallGeometry = new THREE.CubeGeometry( 500, 500, 100, 1, 1, 1 );
