@@ -16,7 +16,8 @@ import {blaster} from './blaster.js';
 
 
 let _APP = null;
-let enemy_number=true;
+let enemy_number1=true;
+let enemy_number2=true;
 const _NUM_BOIDS = 1;
 const _BOID_SPEED = 0;
 const _BOID_ACCELERATION = _BOID_SPEED / 2.5;
@@ -382,37 +383,7 @@ class ProceduralTerrain_Demo extends game.Game {
       requestAnimationFrame(animate);
     }
     loader = new GLTFLoader();
-    loader.setPath('./resources/models/tie-fighter-gltf/');
-    loader.load('scene.gltf', (obj) => {
-      // This is bad, but I only want the mesh and I know this only has 1.
-      // This is what you get when you don't have an art pipeline and don't feel like making one.
-      obj.scene.traverse((c) => {
-        if (c.isMesh) {
-          const model = obj.scene.children[0];
-          model.scale.setScalar(0.05);
-          model.rotateX(Math.PI);
-
-          const mat = new THREE.MeshStandardMaterial({
-            map: new THREE.TextureLoader().load(
-                './resources/models/tie-fighter-gltf/textures/hullblue_baseColor.png'),
-            normalMap: new THREE.TextureLoader().load(
-                './resources/models/tie-fighter-gltf/textures/hullblue_normal.png'),
-          });
-
-          model.material = mat;
-
-          this._library['tie-fighter'] = model;
-        }
-
-        if (this._library['tie-fighter']) {
-          if(enemy_number){
-            this._CreateEnemy1();
-          }
-        }
-      });
-    });
-    loader = new GLTFLoader();
-    loader.setPath('./resources/models/star-destroyer/');
+    loader.setPath('./resources/models/target/');
     loader.load('scene.gltf', (obj) => {
       // This is bad, but I only want the mesh and I know this only has 1.
       // This is what you get when you don't have an art pipeline and don't feel like making one.
@@ -420,7 +391,59 @@ class ProceduralTerrain_Demo extends game.Game {
         if (c.isMesh) {
           const model = obj.scene.children[0];
           model.scale.setScalar(20);
-          model.rotateZ(Math.PI / 2.0);
+          //model.rotateX(95);
+          this._library['target'] = model;
+        }
+
+        if (this._library['target']) {
+          if(enemy_number1){
+            this._CreateEnemy1();
+            enemy_number1=false;
+          }
+        }
+      });
+    });
+    // loader = new GLTFLoader();
+    // loader.setPath('./resources/models/star-destroyer/');
+    // loader.load('scene.gltf', (obj) => {
+    //   // This is bad, but I only want the mesh and I know this only has 1.
+    //   // This is what you get when you don't have an art pipeline and don't feel like making one.
+    //   obj.scene.traverse((c) => {
+    //     if (c.isMesh) {
+    //       const model = obj.scene.children[0];
+    //       model.scale.setScalar(20);
+    //       model.rotateZ(Math.PI / 2.0);
+
+    //       // const mat = new THREE.MeshStandardMaterial({
+    //       //   map: new THREE.TextureLoader().load(
+    //       //       './resources/models/tie-fighter-gltf/textures/hullblue_baseColor.png'),
+    //       //   normalMap: new THREE.TextureLoader().load(
+    //       //       './resources/models/tie-fighter-gltf/textures/hullblue_normal.png'),
+    //       // });
+
+    //       // model.material = mat;
+
+    //       this._library['star-destroyer'] = model;
+    //     }
+
+    //     if (this._library['star-destroyer']) {
+    //       if(enemy_number){
+    //         this._CreateEnemy2();
+    //         enemy_number=false;
+
+    //       }
+    //     }
+    //   });
+    // });
+    loader = new GLTFLoader();
+    loader.setPath('./resources/models/bunker/');
+    loader.load('scene.gltf', (obj) => {
+      // This is bad, but I only want the mesh and I know this only has 1.
+      // This is what you get when you don't have an art pipeline and don't feel like making one.
+      obj.scene.traverse((c) => {
+        if (c.isMesh) {
+          const model = obj.scene.children[0];
+          model.scale.setScalar(30);
 
           // const mat = new THREE.MeshStandardMaterial({
           //   map: new THREE.TextureLoader().load(
@@ -431,13 +454,13 @@ class ProceduralTerrain_Demo extends game.Game {
 
           // model.material = mat;
 
-          this._library['star-destroyer'] = model;
+          this._library['bunker'] = model;
         }
 
-        if (this._library['star-destroyer']) {
-          if(enemy_number){
+        if (this._library['bunker']) {
+          if(enemy_number2){
             this._CreateEnemy2();
-            enemy_number=false;
+            enemy_number2=false;
 
           }
         }

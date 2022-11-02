@@ -1,0 +1,11 @@
+Model Information:
+* title:	Archery Target
+* source:	https://sketchfab.com/3d-models/archery-target-a87f1525b040421c9a1b01a848c8e700
+* author:	sajjad3223 (https://sketchfab.com/sajjad3223)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Archery Target" (https://sketchfab.com/3d-models/archery-target-a87f1525b040421c9a1b01a848c8e700) by sajjad3223 (https://sketchfab.com/sajjad3223) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
