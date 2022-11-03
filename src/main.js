@@ -337,13 +337,13 @@ class ProceduralTerrain_Demo extends game.Game {
     var wireMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe:true } );
 
 
-    var wall = new THREE.Mesh(wallGeometry, wallMaterial);
-    wall.position.set(10065, -30, 50);
+   var wall = new THREE.Mesh(wallGeometry, wallMaterial);
+    wall.position.set(8050,40,60);
     wall.rotation.y = 3.14159 / 2;
     this._graphics.Scene.add(wall);
     collidableMeshList.push(wall);
     var wall = new THREE.Mesh(wallGeometry, wireMaterial);
-    wall.position.set(10065, -30, 50);
+    wall.position.set(8050,40,60);
     wall.rotation.y = 3.14159 / 2;
     this._graphics.Scene.add(wall);
     loader.setPath('./resources/models/x-wing/');
@@ -382,8 +382,11 @@ class ProceduralTerrain_Demo extends game.Game {
       obj.scene.traverse((c) => {
         if (c.isMesh) {
           const model = obj.scene.children[0];
-          model.scale.setScalar(20);
-          //model.rotateX(95);
+          model.scale.setScalar(5);
+          model.rotateZ(Math.PI / 2.0);
+          // model.position.x = 2000;
+          // model.position.y = -25;
+          // model.position.z = 0;
           this._library['target'] = model;
         }
 
@@ -401,15 +404,15 @@ class ProceduralTerrain_Demo extends game.Game {
       obj.scene.traverse((c) => {
         if (c.isMesh) {
           const model = obj.scene.children[0];
-          model.scale.setScalar(75);
+          model.scale.setScalar(5);
           model.rotateZ(Math.PI / 2.0);
-          model.position.x = 2000;
-          model.position.y = -50;
-          model.position.z = 0;
-          this._library['star-destroyer'] = model;
+          // model.position.x = 2000;
+          // model.position.y = -25;
+          // model.position.z = 0;
+          this._library['bunker'] = model;
         }
 
-        if (this._library['star-destroyer']) {
+        if (this._library['bunker']) {
           if(enemy_number2){
             this._CreateEnemy2();
             enemy_number2=false;
@@ -440,7 +443,7 @@ class ProceduralTerrain_Demo extends game.Game {
       for (let i = 0; i < _NUM_BOIDS; i++) {
         
         let params = {
-          mesh: this._library['tie-fighter'].clone(),
+          mesh: this._library['target'].clone(),
           speedMin: 1.0,
           speedMax: 1.0,
           speed: _BOID_SPEED,
@@ -475,7 +478,7 @@ class ProceduralTerrain_Demo extends game.Game {
       for (let i = 0; i < _NUM_BOIDS; i++) {
         
         let params = {
-          mesh: this._library['star-destroyer'].clone(),
+          mesh: this._library['bunker'].clone(),
           speedMin: 1.0,
           speedMax: 1.0,
           speed: _BOID_SPEED,
@@ -494,7 +497,7 @@ class ProceduralTerrain_Demo extends game.Game {
 
   EnemyDied() {
     this._score++;
-    document.getElementById('scoreText').innerText = this._score;
+    //document.getElementById('scoreText').innerText = this._score;
   }
 
   _CreateGUI() {
