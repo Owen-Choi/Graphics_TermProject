@@ -392,22 +392,22 @@ export const controls = (function() {
 
       if (this._move.forward) {
         _A.set(1, 0, 0);
-        _Q.setFromAxisAngle(_A, -Math.PI * timeInSeconds * this._acceleration.y);
+        _Q.setFromAxisAngle(_A, -Math.PI * timeInSeconds * this._acceleration.y*0.4);
         _R.multiply(_Q);
       }
       if (this._move.backward) {
         _A.set(1, 0, 0);
-        _Q.setFromAxisAngle(_A, Math.PI * timeInSeconds * this._acceleration.y);
+        _Q.setFromAxisAngle(_A, Math.PI * timeInSeconds * this._acceleration.y*1.1);
         _R.multiply(_Q);
       }
       if (this._move.left) {
         _A.set(0, 1, 0);
-        _Q.setFromAxisAngle(_A, Math.PI * timeInSeconds * this._acceleration.y);
+        _Q.setFromAxisAngle(_A, Math.PI * timeInSeconds * this._acceleration.y*0.3);
         _R.multiply(_Q);
       }
       if (this._move.right) {
         _A.set(0, 1, 0);
-        _Q.setFromAxisAngle(_A, -Math.PI * timeInSeconds * this._acceleration.y);
+        _Q.setFromAxisAngle(_A, -Math.PI * timeInSeconds * this._acceleration.y*0.3);
         _R.multiply(_Q);
       }
       if (this._move.rollLeft) {
@@ -422,7 +422,7 @@ export const controls = (function() {
       }
       if (this._move.rocket) {
         // this._params.target.TakeDamage(100);
-        velocity.z -= this._acceleration.x * timeInSeconds * 4;
+        velocity.z -= this._acceleration.x * timeInSeconds * 10;
       }
 
       controlObject._model.quaternion.copy(_R);
