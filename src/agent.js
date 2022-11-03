@@ -76,7 +76,7 @@ export const agent = (function() {
       this._group.add(this._mesh);
       this._group.position.set(
           50,
-          30,
+          40,
           60);
       this._group.position.add(params.seekGoal);
 
