@@ -239,8 +239,9 @@ class ProceduralTerrain_Demo extends game.Game {
 
     this._userCamera = new THREE.Object3D();
     this._userCamera.position.set(4100, 0, 0);
-
+    
     this._graphics.Camera.position.set(4000, 400, 4450);
+    // this._graphics.Camera.quaternion.set(-0.032, 0.885, 0.062, 0.46);
     this._graphics.Camera.quaternion.set(-0.032, 0.885, 0.062, 0.46);
 
     this._score = 0;
@@ -332,18 +333,18 @@ class ProceduralTerrain_Demo extends game.Game {
     this._graphics.Scene.add( ice);
     this._graphics.Scene.add(MovingCube);
 
-    var wallGeometry = new THREE.CubeGeometry( 100, 100, 100, 1, 1, 1 );
+    var wallGeometry = new THREE.CubeGeometry( 30, 30, 30, 1, 1, 1 );
     var wallMaterial = new THREE.MeshBasicMaterial( {color: 0x0000ff, opacity: 0, transparent: true} );
     var wireMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe:true } );
 
 
    var wall = new THREE.Mesh(wallGeometry, wallMaterial);
-    wall.position.set(8050,40,60);
+    wall.position.set(10200,120,-250);
     wall.rotation.y = 3.14159 / 2;
     this._graphics.Scene.add(wall);
     collidableMeshList.push(wall);
     var wall = new THREE.Mesh(wallGeometry, wireMaterial);
-    wall.position.set(8050,40,60);
+    wall.position.set(10200,120,-250);
     wall.rotation.y = 3.14159 / 2;
     this._graphics.Scene.add(wall);
     loader.setPath('./resources/models/x-wing/');
@@ -382,7 +383,7 @@ class ProceduralTerrain_Demo extends game.Game {
       obj.scene.traverse((c) => {
         if (c.isMesh) {
           const model = obj.scene.children[0];
-          model.scale.setScalar(5);
+          model.scale.setScalar(10);
           model.rotateZ(Math.PI / 2.0);
           // model.position.x = 2000;
           // model.position.y = -25;
@@ -404,7 +405,7 @@ class ProceduralTerrain_Demo extends game.Game {
       obj.scene.traverse((c) => {
         if (c.isMesh) {
           const model = obj.scene.children[0];
-          model.scale.setScalar(5);
+          model.scale.setScalar(8);
           model.rotateZ(Math.PI / 2.0);
           // model.position.x = 2000;
           // model.position.y = -25;
