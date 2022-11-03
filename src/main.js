@@ -5,6 +5,7 @@ import {GLTFLoader} from 'https://cdn.jsdelivr.net/npm/three@0.112.1/examples/js
 import {GUI} from 'https://cdn.jsdelivr.net/npm/three@0.112.1/examples/jsm/libs/dat.gui.module.js';
 // import {Sky} from 'https://cdn.jsdelivr.net/npm/three@0.112.1/examples/jsm/objects/Sky.js';
 //import {BufferGeometryUtils} from 'https://cdn.jsdelivr.net/npm/three@0.112.1/examples/jsm/utils/BufferGeometryUtils.js';
+//test
 
 import {agent} from './agent.js'; //enemy code
 import {controls} from './controls.js'; // control code
