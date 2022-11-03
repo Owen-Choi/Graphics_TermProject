@@ -332,27 +332,20 @@ class ProceduralTerrain_Demo extends game.Game {
     this._graphics.Scene.add( ice);
     this._graphics.Scene.add(MovingCube);
 
-    var wallGeometry = new THREE.CubeGeometry( 500, 500, 100, 1, 1, 1 );
+    var wallGeometry = new THREE.CubeGeometry( 100, 100, 100, 1, 1, 1 );
     var wallMaterial = new THREE.MeshBasicMaterial( {color: 0x0000ff, opacity: 0, transparent: true} );
     var wireMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe:true } );
 
+
     var wall = new THREE.Mesh(wallGeometry, wallMaterial);
-    wall.position.set(100, 50, -100);
+    wall.position.set(10065, -30, 50);
+    wall.rotation.y = 3.14159 / 2;
     this._graphics.Scene.add(wall);
     collidableMeshList.push(wall);
     var wall = new THREE.Mesh(wallGeometry, wireMaterial);
-    wall.position.set(100, 50, -100);
+    wall.position.set(10065, -30, 50);
+    wall.rotation.y = 3.14159 / 2;
     this._graphics.Scene.add(wall);
-
-    var wall2 = new THREE.Mesh(wallGeometry, wallMaterial);
-    wall2.position.set(8000, -100, 0);
-    wall2.rotation.y = 3.14159 / 2;
-    this._graphics.Scene.add(wall2);
-    collidableMeshList.push(wall2);
-    var wall2 = new THREE.Mesh(wallGeometry, wireMaterial);
-    wall2.position.set(8000, -100, 0);
-    wall2.rotation.y = 3.14159 / 2;
-    this._graphics.Scene.add(wall2);
     loader.setPath('./resources/models/x-wing/');
     loader.load('scene.gltf', (gltf) => {
       model = gltf.scene.children[0];
@@ -386,8 +379,6 @@ class ProceduralTerrain_Demo extends game.Game {
     loader = new GLTFLoader();
     loader.setPath('./resources/models/target/');
     loader.load('scene.gltf', (obj) => {
-      // This is bad, but I only want the mesh and I know this only has 1.
-      // This is what you get when you don't have an art pipeline and don't feel like making one.
       obj.scene.traverse((c) => {
         if (c.isMesh) {
           const model = obj.scene.children[0];
@@ -404,61 +395,21 @@ class ProceduralTerrain_Demo extends game.Game {
         }
       });
     });
-    // loader = new GLTFLoader();
-    // loader.setPath('./resources/models/star-destroyer/');
-    // loader.load('scene.gltf', (obj) => {
-    //   // This is bad, but I only want the mesh and I know this only has 1.
-    //   // This is what you get when you don't have an art pipeline and don't feel like making one.
-    //   obj.scene.traverse((c) => {
-    //     if (c.isMesh) {
-    //       const model = obj.scene.children[0];
-    //       model.scale.setScalar(20);
-    //       model.rotateZ(Math.PI / 2.0);
-
-    //       // const mat = new THREE.MeshStandardMaterial({
-    //       //   map: new THREE.TextureLoader().load(
-    //       //       './resources/models/tie-fighter-gltf/textures/hullblue_baseColor.png'),
-    //       //   normalMap: new THREE.TextureLoader().load(
-    //       //       './resources/models/tie-fighter-gltf/textures/hullblue_normal.png'),
-    //       // });
-
-    //       // model.material = mat;
-
-    //       this._library['star-destroyer'] = model;
-    //     }
-
-    //     if (this._library['star-destroyer']) {
-    //       if(enemy_number){
-    //         this._CreateEnemy2();
-    //         enemy_number=false;
-
-    //       }
-    //     }
-    //   });
-    // });
     loader = new GLTFLoader();
     loader.setPath('./resources/models/bunker/');
     loader.load('scene.gltf', (obj) => {
-      // This is bad, but I only want the mesh and I know this only has 1.
-      // This is what you get when you don't have an art pipeline and don't feel like making one.
       obj.scene.traverse((c) => {
         if (c.isMesh) {
           const model = obj.scene.children[0];
-          model.scale.setScalar(30);
-
-          // const mat = new THREE.MeshStandardMaterial({
-          //   map: new THREE.TextureLoader().load(
-          //       './resources/models/tie-fighter-gltf/textures/hullblue_baseColor.png'),
-          //   normalMap: new THREE.TextureLoader().load(
-          //       './resources/models/tie-fighter-gltf/textures/hullblue_normal.png'),
-          // });
-
-          // model.material = mat;
-
-          this._library['bunker'] = model;
+          model.scale.setScalar(75);
+          model.rotateZ(Math.PI / 2.0);
+          model.position.x = 2000;
+          model.position.y = -50;
+          model.position.z = 0;
+          this._library['star-destroyer'] = model;
         }
 
-        if (this._library['bunker']) {
+        if (this._library['star-destroyer']) {
           if(enemy_number2){
             this._CreateEnemy2();
             enemy_number2=false;
@@ -484,34 +435,6 @@ class ProceduralTerrain_Demo extends game.Game {
     for (let j = 0; j < 2; j++) {
       const p = positions[j];
 
-      // let loader = new GLTFLoader();
-      // loader.setPath('./resources/models/star-destroyer/');
-      // loader.load('scene.gltf', (gltf) => {
-      //   const model = gltf.scene.children[0];
-      //   model.scale.setScalar(20.0);
-      //   model.rotateZ(Math.PI / 2.0);
-
-      //   const cruiser = model;
-      //   cruiser.position.set(p.x, p.y, p.z);
-      //   cruiser.castShadow = true;
-      //   cruiser.receiveShadow = true;
-      //   cruiser.updateWorldMatrix();
-      //   this._graphics.Scene.add(cruiser);
-      // });
-      // let loader = new GLTFLoader();
-      // loader.setPath('./resources/models/tie-fighter-gltf/');
-      // loader.load('scene.gltf', (gltf) => {
-      //   const model = gltf.scene.children[0];
-      //   model.scale.setScalar(0.05);
-      //   model.rotateX(Math.PI);
-
-      //   const cruiser = model;
-      //   cruiser.position.set(p.x, p.y, p.z);
-      //   cruiser.castShadow = true;
-      //   cruiser.receiveShadow = true;
-      //   cruiser.updateWorldMatrix();
-      //   this._graphics.Scene.add(cruiser);
-      // });
 
 
       for (let i = 0; i < _NUM_BOIDS; i++) {
@@ -547,34 +470,6 @@ class ProceduralTerrain_Demo extends game.Game {
     for (let j = 0; j < 2; j++) {
       const p = positions[j];
 
-      // let loader = new GLTFLoader();
-      // loader.setPath('./resources/models/star-destroyer/');
-      // loader.load('scene.gltf', (gltf) => {
-      //   const model = gltf.scene.children[0];
-      //   model.scale.setScalar(20.0);
-      //   model.rotateZ(Math.PI / 2.0);
-
-      //   const cruiser = model;
-      //   cruiser.position.set(p.x, p.y, p.z);
-      //   cruiser.castShadow = true;
-      //   cruiser.receiveShadow = true;
-      //   cruiser.updateWorldMatrix();
-      //   this._graphics.Scene.add(cruiser);
-      // });
-      // let loader = new GLTFLoader();
-      // loader.setPath('./resources/models/tie-fighter-gltf/');
-      // loader.load('scene.gltf', (gltf) => {
-      //   const model = gltf.scene.children[0];
-      //   model.scale.setScalar(0.05);
-      //   model.rotateX(Math.PI);
-
-      //   const cruiser = model;
-      //   cruiser.position.set(p.x, p.y, p.z);
-      //   cruiser.castShadow = true;
-      //   cruiser.receiveShadow = true;
-      //   cruiser.updateWorldMatrix();
-      //   this._graphics.Scene.add(cruiser);
-      // });
 
 
       for (let i = 0; i < _NUM_BOIDS; i++) {
@@ -607,28 +502,6 @@ class ProceduralTerrain_Demo extends game.Game {
     this._CreateControlGUI();
   }
 
-  // _CreateGameGUI() {
-  //   const guiDiv = document.createElement('div');
-  //   guiDiv.className = 'guiRoot guiBox';
-  //
-  //   const scoreDiv = document.createElement('div');
-  //   scoreDiv.className = 'vertical';
-  //
-  //   const scoreTitle = document.createElement('div');
-  //   scoreTitle.className = 'guiBigText';
-  //   scoreTitle.innerText = 'KILLS';
-  //
-  //   const scoreText = document.createElement('div');
-  //   scoreText.className = 'guiSmallText';
-  //   scoreText.innerText = '0';
-  //   scoreText.id = 'scoreText';
-  //
-  //   scoreDiv.appendChild(scoreTitle);
-  //   scoreDiv.appendChild(scoreText);
-  //
-  //   guiDiv.appendChild(scoreDiv);
-  //   document.body.appendChild(guiDiv);
-  // }
 
   _CreateControlGUI() {
     this._guiParams = {
