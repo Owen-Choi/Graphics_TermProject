@@ -337,12 +337,12 @@ class ProceduralTerrain_Demo extends game.Game {
 
 
     var wall = new THREE.Mesh(wallGeometry, wallMaterial);
-    wall.position.set(10000, 0, 100);
+    wall.position.set(10065, -30, 50);
     wall.rotation.y = 3.14159 / 2;
     this._graphics.Scene.add(wall);
     collidableMeshList.push(wall);
     var wall = new THREE.Mesh(wallGeometry, wireMaterial);
-    wall.position.set(10000, 0, 100);
+    wall.position.set(10065, -30, 50);
     wall.rotation.y = 3.14159 / 2;
     this._graphics.Scene.add(wall);
     loader.setPath('./resources/models/x-wing/');
@@ -403,7 +403,7 @@ class ProceduralTerrain_Demo extends game.Game {
           model.scale.setScalar(75);
           model.rotateZ(Math.PI / 2.0);
           model.position.x = 2000;
-          model.position.y = 0;
+          model.position.y = -50;
           model.position.z = 0;
           this._library['star-destroyer'] = model;
         }
