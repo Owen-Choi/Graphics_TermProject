@@ -240,7 +240,7 @@ class ProceduralTerrain_Demo extends game.Game {
     this._userCamera = new THREE.Object3D();
     this._userCamera.position.set(4100, 0, 0);
 
-    this._graphics.Camera.position.set(10500, 300, -2130);
+    this._graphics.Camera.position.set(40d00, 400, 4450);
     this._graphics.Camera.quaternion.set(-0.032, 0.885, 0.062, 0.46);
 
     this._score = 0;

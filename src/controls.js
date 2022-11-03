@@ -422,7 +422,7 @@ export const controls = (function() {
       }
       if (this._move.rocket) {
         // this._params.target.TakeDamage(100);
-        velocity.z -= this._acceleration.x * timeInSeconds * 10;
+        velocity.z -= this._acceleration.x * timeInSeconds * 15;
       }
 
       controlObject._model.quaternion.copy(_R);
