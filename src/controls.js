@@ -94,10 +94,10 @@ export const controls = (function() {
         case 68: // d
           this._move.right = true;
           break;
-        case 33: // PG_UP
+        case 81: // q
           this._move.up = true;
           break;
-        case 34: // PG_DOWN
+        case 69: // e
           this._move.down = true;
           break;
       }
@@ -121,10 +121,10 @@ export const controls = (function() {
         case 68: // d
           this._move.right = false;
           break;
-        case 33: // PG_UP
+        case 81: // q
           this._move.up = false;
           break;
-        case 34: // PG_DOWN
+        case 69: // e
           this._move.down = false;
           break;
       }
@@ -321,10 +321,10 @@ export const controls = (function() {
         case 68: // d
           this._move.right = true;
           break;
-        case 33: // PG_UP
+        case 81: // q
           this._move.rollLeft = true;
           break;
-        case 34: // PG_DOWN
+        case 69: // e
           this._move.rollRight = true;
           break;
         case 32: // SPACE
@@ -354,10 +354,10 @@ export const controls = (function() {
         case 68: // d
           this._move.right = false;
           break;
-        case 33: // PG_UP
+        case 81: // q
           this._move.rollLeft = false;
           break;
-        case 34: // PG_DOWN
+        case 69: // e
         this._move.rollRight = false;
           break;
         case 32: // SPACE
