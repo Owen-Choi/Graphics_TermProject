@@ -9,11 +9,11 @@ import {GUI} from 'https://cdn.jsdelivr.net/npm/three@0.112.1/examples/jsm/libs/
 
 import {agent} from './agent.js'; //enemy code
 import {controls} from './controls.js'; // control code
-import {game} from './game.js';//전반적인 게임 요소
-import {math} from './math.js'; // 수학공식
+import {game} from './game.js';//overall game elements
+import {math} from './math.js'; // necessary math formulas
 import {visibility} from './visibility.js';
 import {particles} from './particles.js';
-import {blaster} from './blaster.js';
+import {blaster} from './blaster.js'; // attack settings
 
 
 let _APP = null;
@@ -150,8 +150,8 @@ class PlayerEntity {
 
       if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) {
         console.log("collision detected");
-        // 처음에 gltf 모델을 인식해서 그런지 8번은 불가피하게 충돌로 판정이 됩니다.
-        // 그때 게임이 종료되는 것을 막기 위해 최초 8번의 충돌은 무효로 처리합니다.
+        // Because it recognized the gltf model at first, number 8 is inevitably judged as a collision.
+        // In order to prevent the game from ending at that time, the first 8 collisions are invalidated.
         cnt++ > 8 ? this.TakeDamage(1000) : {};
 
         // this.TakeDamage(1000);
@@ -236,7 +236,8 @@ class ProceduralTerrain_Demo extends game.Game {
 
   _OnInitialize() {
     this._CreateGUI();
-
+    
+    // Create a fighter position
     this._userCamera = new THREE.Object3D();
     this._userCamera.position.set(4100, 0, 0);
     
@@ -305,7 +306,7 @@ class ProceduralTerrain_Demo extends game.Game {
       fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
       // side: THREE.DoubleSide
     }   );
-      
+    // Create collision mesh
     var planeGeo = new THREE.PlaneGeometry( 10000, 10000, 100, 100 );
     var plane = new THREE.Mesh(	planeGeo, customMaterial );
     // plane.rotation.x = -Math.PI / 2;
@@ -389,7 +390,7 @@ class ProceduralTerrain_Demo extends game.Game {
       obj.scene.traverse((c) => {
         if (c.isMesh) {
           const model = obj.scene.children[0];
-          model.scale.setScalar(10);
+          model.scale.setScalar(20);
           model.rotateZ(Math.PI / 2.0);
           // model.position.x = 2000;
           // model.position.y = -25;
@@ -411,7 +412,7 @@ class ProceduralTerrain_Demo extends game.Game {
       obj.scene.traverse((c) => {
         if (c.isMesh) {
           const model = obj.scene.children[0];
-          model.scale.setScalar(8);
+          model.scale.setScalar(18);
           model.rotateZ(Math.PI / 2.0);
           // model.position.x = 2000;
           // model.position.y = -25;
@@ -431,7 +432,7 @@ class ProceduralTerrain_Demo extends game.Game {
     this._LoadBackground();
   }
 
-  // 적 배
+  // Target creation
   _CreateEnemy1() { 
     const positions = [
       new THREE.Vector3(8000, 0, 0),
