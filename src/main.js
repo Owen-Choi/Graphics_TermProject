@@ -331,6 +331,8 @@ class ProceduralTerrain_Demo extends game.Game {
     ice.position.z=0;
     collidableMeshList.push(ice);
     this._graphics.Scene.add( ice);
+    MovingCube.material.transparent=true;
+    MovingCube.material.opacity=0;
     this._graphics.Scene.add(MovingCube);
 
     var wallGeometry = new THREE.CubeGeometry( 30, 30, 30, 1, 1, 1 );
@@ -341,11 +343,15 @@ class ProceduralTerrain_Demo extends game.Game {
    var wall = new THREE.Mesh(wallGeometry, wallMaterial);
     wall.position.set(10200,120,-250);
     wall.rotation.y = 3.14159 / 2;
+    wall.material.transparent = true;
+    wall.material.opacity = 0;
     this._graphics.Scene.add(wall);
     collidableMeshList.push(wall);
     var wall = new THREE.Mesh(wallGeometry, wireMaterial);
     wall.position.set(10200,120,-250);
     wall.rotation.y = 3.14159 / 2;
+    wall.material.transparent = true;
+    wall.material.opacity = 0;
     this._graphics.Scene.add(wall);
     loader.setPath('./resources/models/x-wing/');
     loader.load('scene.gltf', (gltf) => {
