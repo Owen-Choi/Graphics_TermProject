@@ -424,7 +424,7 @@ export const controls = (function() {
         // this._params.target.TakeDamage(100);
         velocity.z -= this._acceleration.x * timeInSeconds * 15;
       }
-
+      velocity.z -= this._acceleration.x * timeInSeconds * 15;
       controlObject._model.quaternion.copy(_R);
 
       const oldPosition = new THREE.Vector3();
@@ -442,7 +442,7 @@ export const controls = (function() {
 
       sideways.multiplyScalar(velocity.x * timeInSeconds);
       updown.multiplyScalar(velocity.y * timeInSeconds);
-      forward.multiplyScalar(velocity.z * timeInSeconds);
+      forward.multiplyScalar(velocity.z * timeInSeconds*1.5);
 
       controlObject._model.position.add(forward);
       controlObject._model.position.add(sideways);
@@ -452,7 +452,7 @@ export const controls = (function() {
       oldPosition.copy(controlObject._model.position);
 
       // Now place the camera in relation
-      const offsetFactor = (-velocity.z - 25.0) / 100.0;
+      const offsetFactor = (-velocity.z - 25.0) / 120.0;
       const offset = new THREE.Vector3(0, 4, math.smootherstep(offsetFactor, 10.0, 15.0));
       offset.applyQuaternion(this._params.camera.quaternion);
 
