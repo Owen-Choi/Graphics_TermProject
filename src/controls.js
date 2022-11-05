@@ -327,9 +327,7 @@ export const controls = (function() {
         case 69: // e
           this._move.rollRight = true;
           break;
-        case 32: // SPACE
-          this._move.rocket = true;
-          break;
+
         case 13: // ENTER
           this._move.fire = true;
         case 38: // up
@@ -360,8 +358,7 @@ export const controls = (function() {
         case 69: // e
         this._move.rollRight = false;
           break;
-        case 32: // SPACE
-          this._move.rocket = false;
+
           break;
         case 13: // ENTER
           this._move.fire = false;
@@ -397,12 +394,12 @@ export const controls = (function() {
 
       if (this._move.forward) {
         _A.set(1, 0, 0);
-        _Q.setFromAxisAngle(_A, -Math.PI * timeInSeconds * this._acceleration.y*0.4);
+        _Q.setFromAxisAngle(_A, -Math.PI * timeInSeconds * this._acceleration.y*0.3);
         _R.multiply(_Q);
       }
       if (this._move.backward) {
         _A.set(1, 0, 0);
-        _Q.setFromAxisAngle(_A, Math.PI * timeInSeconds * this._acceleration.y*1.1);
+        _Q.setFromAxisAngle(_A, Math.PI * timeInSeconds * this._acceleration.y*0.7);
         _R.multiply(_Q);
       }
       if (this._move.left) {
@@ -417,19 +414,16 @@ export const controls = (function() {
       }
       if (this._move.rollLeft) {
         _A.set(0, 0, -1);
-        _Q.setFromAxisAngle(_A, -Math.PI * timeInSeconds * this._acceleration.y);
+        _Q.setFromAxisAngle(_A, -Math.PI * timeInSeconds * this._acceleration.y*1.1);
         _R.multiply(_Q);
       }
       if (this._move.rollRight) {
         _A.set(0, 0, -1);
-        _Q.setFromAxisAngle(_A, Math.PI * timeInSeconds * this._acceleration.y);
+        _Q.setFromAxisAngle(_A, Math.PI * timeInSeconds * this._acceleration.y*1.1);
         _R.multiply(_Q);
       }
-      if (this._move.rocket) {
-        // this._params.target.TakeDamage(100);
-        velocity.z -= this._acceleration.x * timeInSeconds * 15;
-      }
-      velocity.z -= this._acceleration.x * timeInSeconds * 15;
+
+      velocity.z -= this._acceleration.x * timeInSeconds * 13;
       controlObject._model.quaternion.copy(_R);
 
       const oldPosition = new THREE.Vector3();
@@ -447,7 +441,7 @@ export const controls = (function() {
 
       sideways.multiplyScalar(velocity.x * timeInSeconds);
       updown.multiplyScalar(velocity.y * timeInSeconds);
-      forward.multiplyScalar(velocity.z * timeInSeconds*1.5);
+      forward.multiplyScalar(velocity.z * timeInSeconds*2.3);
 
       controlObject._model.position.add(forward);
       controlObject._model.position.add(sideways);
@@ -461,7 +455,7 @@ export const controls = (function() {
       const offset = new THREE.Vector3(0, 4, math.smootherstep(offsetFactor, 10.0, 15.0));
       offset.applyQuaternion(this._params.camera.quaternion);
 
-      this._params.camera.quaternion.slerp(this._params.target._model.quaternion, timeInSeconds * 2.0);
+      this._params.camera.quaternion.slerp(this._params.target._model.quaternion, timeInSeconds * 7);
   
       const position = new THREE.Vector3();
       position.copy(this._params.target._model.position);
