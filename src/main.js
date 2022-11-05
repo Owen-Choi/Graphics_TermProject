@@ -27,14 +27,7 @@ let collidableMeshList = [];
 var cubeGeometry = new THREE.CubeGeometry(5,5,5,1,1,1);
 var wireMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe:true } );
 var MovingCube = new THREE.Mesh( cubeGeometry, wireMaterial );
-var isGameOver = false;
 var cnt = 0;
-// const _BOID_FORCE_ORIGIN = 50;
-// const _BOID_FORCE_ALIGNMENT = 10;
-// const _BOID_FORCE_SEPARATION = 20;
-// const _BOID_FORCE_COLLISION = 50;
-// const _BOID_FORCE_COHESION = 5;
-// const _BOID_FORCE_WANDER = 3;
 
 class PlayerEntity {
   constructor(params) {
@@ -98,10 +91,8 @@ class PlayerEntity {
 
     this._health -= dmg;
     if (this._health <= 0.0) {
-      // 여기서 게임을 바로 끝내야 할듯 합니다. 두번째 parameter this._game.visibilityIndex가 iterative가 아니라고 오류가 발생하네요.
-      // this._game._visibilityGrid.RemoveItem(this._model.uuid, this._game._visibilityIndex);
       console.log("게임 종료");
-      isGameOver = true;
+      this._CreateGameGUI()
     }    
   }
 
@@ -129,7 +120,7 @@ class PlayerEntity {
   }
 
   Update(timeInSeconds) {
-    if (this.Dead || isGameOver) {
+    if (this.Dead) {
       return;
     }
 
@@ -170,6 +161,42 @@ class PlayerEntity {
     this._direction.normalize();
     this._direction.applyQuaternion(this._model.quaternion);
   }
+
+  _CreateGameGUI() {
+    const guiDiv = document.createElement('div');
+    guiDiv.className = 'guiRoot guiBox';
+
+    const scoreDiv = document.createElement('div');
+    scoreDiv.className = 'vertical';
+
+    const scoreTitle = document.createElement('div');
+    scoreTitle.className = 'guiBigText';
+    scoreTitle.innerText = 'Mission';
+
+    const scoreText = document.createElement('div');
+    scoreText.className = 'guiSmallText';
+    scoreText.innerText = 'FAILED';
+
+    const retryButton = document.createElement('button');
+    retryButton.className = 'retryButton';
+    retryButton.innerText = 'Try again';
+    retryButton.onclick = function () {
+      location.reload();
+    }
+
+    // 미션 완료시 아래 코드로 성공여부 수정
+    // document.getElementById('scoreText').innerText = 'SUCCESS';
+
+    scoreText.id = 'scoreText';
+
+    scoreDiv.appendChild(scoreTitle);
+    scoreDiv.appendChild(scoreText);
+
+    guiDiv.appendChild(scoreDiv);
+    guiDiv.appendChild(retryButton);
+    document.body.appendChild(guiDiv);
+  }
+
 }
 
 
@@ -513,7 +540,6 @@ class ProceduralTerrain_Demo extends game.Game {
   }
 
   _CreateGUI() {
-    // this._CreateGameGUI();
     this._CreateControlGUI();
   }
 
