@@ -374,6 +374,7 @@ export const controls = (function() {
     }
 
     Update(timeInSeconds) {
+
       const velocity = this._params.target.Velocity;
       const frameDecceleration = new THREE.Vector3(
           velocity.x * this._decceleration.x,
@@ -389,6 +390,10 @@ export const controls = (function() {
       const _Q = new THREE.Quaternion();
       const _A = new THREE.Vector3();
       const _R = controlObject._model.quaternion.clone();
+
+      if (controlObject._health <= 0 ){
+        return;
+      }
 
       if (this._move.forward) {
         _A.set(1, 0, 0);

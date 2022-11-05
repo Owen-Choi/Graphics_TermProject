@@ -27,6 +27,7 @@ let collidableMeshList = [];
 var cubeGeometry = new THREE.CubeGeometry(5,5,5,1,1,1);
 var wireMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe:true } );
 var MovingCube = new THREE.Mesh( cubeGeometry, wireMaterial );
+var isGameOver = false;
 var cnt = 0;
 // const _BOID_FORCE_ORIGIN = 50;
 // const _BOID_FORCE_ALIGNMENT = 10;
@@ -100,6 +101,7 @@ class PlayerEntity {
       // 여기서 게임을 바로 끝내야 할듯 합니다. 두번째 parameter this._game.visibilityIndex가 iterative가 아니라고 오류가 발생하네요.
       // this._game._visibilityGrid.RemoveItem(this._model.uuid, this._game._visibilityIndex);
       console.log("게임 종료");
+      isGameOver = true;
     }    
   }
 
@@ -127,7 +129,7 @@ class PlayerEntity {
   }
 
   Update(timeInSeconds) {
-    if (this.Dead) {
+    if (this.Dead || isGameOver) {
       return;
     }
 
@@ -135,6 +137,8 @@ class PlayerEntity {
     MovingCube.position.x = this._model.position.x;
     MovingCube.position.y = this._model.position.y + 1.5;
     MovingCube.position.z = this._model.position.z;
+
+
     var originPoint = this._model.position.clone();
     // var originPoint = MovingCube.clone();
 
@@ -336,23 +340,23 @@ class ProceduralTerrain_Demo extends game.Game {
     MovingCube.material.opacity=0;
     this._graphics.Scene.add(MovingCube);
 
-    var wallGeometry = new THREE.CubeGeometry( 30, 30, 30, 1, 1, 1 );
-    var wallMaterial = new THREE.MeshBasicMaterial( {color: 0x0000ff, opacity: 0, transparent: true} );
+    var wallGeometry = new THREE.CubeGeometry( 10000, 20, 10000, 1, 1, 1 );
+    var wallMaterial = new THREE.MeshBasicMaterial( {color: 0x0000ff, opacity: 0.3, transparent: true} );
     var wireMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe:true } );
 
 
    var wall = new THREE.Mesh(wallGeometry, wallMaterial);
-    wall.position.set(10200,120,-250);
+    wall.position.set(8000,450,0);
     wall.rotation.y = 3.14159 / 2;
     wall.material.transparent = true;
-    wall.material.opacity = 0;
+    wall.material.opacity = 0.3;
     this._graphics.Scene.add(wall);
     collidableMeshList.push(wall);
     var wall = new THREE.Mesh(wallGeometry, wireMaterial);
-    wall.position.set(10200,120,-250);
+    wall.position.set(8000,450,0);
     wall.rotation.y = 3.14159 / 2;
     wall.material.transparent = true;
-    wall.material.opacity = 0;
+    wall.material.opacity = 0.3;
     this._graphics.Scene.add(wall);
     loader.setPath('./resources/models/x-wing/');
     loader.load('scene.gltf', (gltf) => {
