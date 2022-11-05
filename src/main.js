@@ -290,7 +290,7 @@ class ProceduralTerrain_Demo extends game.Game {
       bumpTexture:	{ type: "t", value: bumpTexture },
       bumpScale:	    { type: "f", value: bumpScale },
       oceanTexture:	{ type: "t", value: oceanTexture },
-      sandyTexture:	{ type: "t", value: sandyTexture },
+      sandyTexture:	{ type: "t ", value: sandyTexture },
       grassTexture:	{ type: "t", value: grassTexture },
       rockyTexture:	{ type: "t", value: rockyTexture },
       snowyTexture:	{ type: "t", value: snowyTexture },
