@@ -75,9 +75,9 @@ export const agent = (function() {
       this._group = new THREE.Group();
       this._group.add(this._mesh);
       this._group.position.set(
-          2200,
-          120,
-          -250);
+          1000,
+          1000,
+          10000);
       this._group.position.add(params.seekGoal);
 
       this._direction = new THREE.Vector3(

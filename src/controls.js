@@ -394,22 +394,22 @@ export const controls = (function() {
 
       if (this._move.forward) {
         _A.set(1, 0, 0);
-        _Q.setFromAxisAngle(_A, -Math.PI * timeInSeconds * this._acceleration.y*0.2);
+        _Q.setFromAxisAngle(_A, -Math.PI * timeInSeconds * this._acceleration.y*0.3);
         _R.multiply(_Q);
       }
       if (this._move.backward) {
         _A.set(1, 0, 0);
-        _Q.setFromAxisAngle(_A, Math.PI * timeInSeconds * this._acceleration.y*0.8);
+        _Q.setFromAxisAngle(_A, Math.PI * timeInSeconds * this._acceleration.y*0.7);
         _R.multiply(_Q);
       }
       if (this._move.left) {
         _A.set(0, 1, 0);
-        _Q.setFromAxisAngle(_A, Math.PI * timeInSeconds * this._acceleration.y*0.2);
+        _Q.setFromAxisAngle(_A, Math.PI * timeInSeconds * this._acceleration.y*0.3);
         _R.multiply(_Q);
       }
       if (this._move.right) {
         _A.set(0, 1, 0);
-        _Q.setFromAxisAngle(_A, -Math.PI * timeInSeconds * this._acceleration.y*0.2);
+        _Q.setFromAxisAngle(_A, -Math.PI * timeInSeconds * this._acceleration.y*0.3);
         _R.multiply(_Q);
       }
       if (this._move.rollLeft) {
@@ -423,7 +423,7 @@ export const controls = (function() {
         _R.multiply(_Q);
       }
 
-      velocity.z -= this._acceleration.x * timeInSeconds * 15;
+      velocity.z -= this._acceleration.x * timeInSeconds * 13;
       controlObject._model.quaternion.copy(_R);
 
       const oldPosition = new THREE.Vector3();
@@ -455,7 +455,7 @@ export const controls = (function() {
       const offset = new THREE.Vector3(0, 4, math.smootherstep(offsetFactor, 10.0, 15.0));
       offset.applyQuaternion(this._params.camera.quaternion);
 
-      this._params.camera.quaternion.slerp(this._params.target._model.quaternion, timeInSeconds * 1.5);
+      this._params.camera.quaternion.slerp(this._params.target._model.quaternion, timeInSeconds * 7);
   
       const position = new THREE.Vector3();
       position.copy(this._params.target._model.position);
