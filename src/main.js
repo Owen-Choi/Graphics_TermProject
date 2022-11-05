@@ -367,24 +367,36 @@ class ProceduralTerrain_Demo extends game.Game {
     MovingCube.material.opacity=0;
     this._graphics.Scene.add(MovingCube);
 
-    var wallGeometry = new THREE.CubeGeometry( 10000, 20, 10000, 1, 1, 1 );
+    var wallGeometry = new THREE.CubeGeometry( 10000, 20, 6000, 1, 1, 1 );
     var wallMaterial = new THREE.MeshBasicMaterial( {color: 0x0000ff, opacity: 0.3, transparent: true} );
     var wireMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe:true } );
 
+    var bunkerGeometry = new THREE.CubeGeometry( 50, 50, 50, 1, 1, 1 );
+    var bunkerMaterial = new THREE.MeshBasicMaterial( {color: 0x0000ff, opacity: 0, transparent: true} );
+    var bunkerMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe:true } );
 
    var wall = new THREE.Mesh(wallGeometry, wallMaterial);
-    wall.position.set(8000,450,0);
+    wall.position.set(5000,450,0);
     wall.rotation.y = 3.14159 / 2;
     wall.material.transparent = true;
     wall.material.opacity = 0.3;
     this._graphics.Scene.add(wall);
     collidableMeshList.push(wall);
-    var wall = new THREE.Mesh(wallGeometry, wireMaterial);
-    wall.position.set(8000,450,0);
-    wall.rotation.y = 3.14159 / 2;
-    wall.material.transparent = true;
-    wall.material.opacity = 0.3;
-    this._graphics.Scene.add(wall);
+    // var wall = new THREE.Mesh(wallGeometry, wireMaterial);
+    // wall.position.set(8000,450,0);
+    // wall.rotation.y = 3.14159 / 2;
+    // wall.material.transparent = true;
+    // wall.material.opacity = 0.3;
+    // this._graphics.Scene.add(wall);
+
+    var bunkerColliderMesh = new THREE.Mesh(bunkerGeometry, bunkerMaterial);
+    bunkerColliderMesh.position.set(11405,220,-508);
+    bunkerColliderMesh.rotation.y = 3.14159 / 2;
+    // bunkerColliderMesh.material.transparent = true;
+    // bunkerColliderMesh.material.opacity = 0.3;
+    this._graphics.Scene.add(bunkerColliderMesh);
+    collidableMeshList.push(bunkerColliderMesh);
+
     loader.setPath('./resources/models/x-wing/');
     loader.load('scene.gltf', (gltf) => {
       model = gltf.scene.children[0];
