@@ -368,7 +368,7 @@ class ProceduralTerrain_Demo extends game.Game {
     this._graphics.Scene.add(MovingCube);
 
     var wallGeometry = new THREE.CubeGeometry( 10000, 20, 6000, 1, 1, 1 );
-    var wallMaterial = new THREE.MeshBasicMaterial( {color: 0x0000ff, opacity: 0.3, transparent: true} );
+    var wallMaterial = new THREE.MeshBasicMaterial( {color: 0x0000ff, opacity: 0, transparent: true} );
     var wireMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe:true } );
 
     var bunkerGeometry = new THREE.CubeGeometry( 50, 50, 50, 1, 1, 1 );
@@ -379,7 +379,7 @@ class ProceduralTerrain_Demo extends game.Game {
     wall.position.set(5000,450,0);
     wall.rotation.y = 3.14159 / 2;
     wall.material.transparent = true;
-    wall.material.opacity = 0.3;
+    wall.material.opacity = 0;
     this._graphics.Scene.add(wall);
     collidableMeshList.push(wall);
     // var wall = new THREE.Mesh(wallGeometry, wireMaterial);
@@ -396,6 +396,15 @@ class ProceduralTerrain_Demo extends game.Game {
     // bunkerColliderMesh.material.opacity = 0.3;
     this._graphics.Scene.add(bunkerColliderMesh);
     collidableMeshList.push(bunkerColliderMesh);
+
+    var mountainWall = new THREE.Mesh(mountainGeometry, mountainMaterial);
+    mountainWall.position.set(13000,1200,-1500);
+    mountainWall.rotation.y = 3.14159 / 2;
+    mountainWall.material.transparent = true;
+    mountainWall.material.opacity = 0;
+    this._graphics.Scene.add(mountainWall);
+    collidableMeshList.push(mountainWall);
+
 
     loader.setPath('./resources/models/x-wing/');
     loader.load('scene.gltf', (gltf) => {

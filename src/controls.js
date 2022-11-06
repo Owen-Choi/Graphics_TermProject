@@ -394,7 +394,7 @@ export const controls = (function() {
 
       if (this._move.forward) {
         _A.set(1, 0, 0);
-        _Q.setFromAxisAngle(_A, -Math.PI * timeInSeconds * this._acceleration.y*0.3);
+        _Q.setFromAxisAngle(_A, -Math.PI * timeInSeconds * this._acceleration.y*0.1);
         _R.multiply(_Q);
       }
       if (this._move.backward) {
