@@ -39,7 +39,6 @@ class PlayerEntity {
     this._direction = new THREE.Vector3(0, 0, -1);
     this._health = 1000.0;
 
-    // MovingCube.position.set(this._model.position);
 
     const x = 2.75;
     const y1 = 1.5;
@@ -48,8 +47,6 @@ class PlayerEntity {
     this._offsets = [
         new THREE.Vector3(-x, y1, -z),
         new THREE.Vector3(x, y1, -z),
-        // new THREE.Vector3(-x, -y2, -z),
-        // new THREE.Vector3(x, -y2, -z),
     ];
 
     this._offsetIndex = 0;
@@ -85,7 +82,7 @@ class PlayerEntity {
     return (this._health <= 0.0);
   }
 
-  // 지형에 충돌이 감지되면 TakeDamage로 오브젝트 파괴 예정
+  // Destroy the object with TakeDamage when a collision is detected with the terrain
   TakeDamage(dmg) {
     this._params.game._entities['_explosionSystem'].Splode(this.Position);
 
@@ -124,21 +121,18 @@ class PlayerEntity {
       return;
     }
 
-    // MovingCube.position.set(this._model.position);
     MovingCube.position.x = this._model.position.x;
     MovingCube.position.y = this._model.position.y + 1.5;
     MovingCube.position.z = this._model.position.z;
 
 
     var originPoint = this._model.position.clone();
-    // var originPoint = MovingCube.clone();
 
     for (var vertexIndex = 0; vertexIndex < cubeGeometry.vertices.length; vertexIndex++)
     {
       var localVertex = MovingCube.geometry.vertices[vertexIndex].clone();
       var globalVertex = localVertex.applyMatrix4( MovingCube.matrix );
       var directionVector = globalVertex.sub( this._model.position.clone() );
-      // var directionVector = globalVertex.sub( MovingCube.clone() );
 
       var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
       var collisionResults = ray.intersectObjects( collidableMeshList );
@@ -149,7 +143,6 @@ class PlayerEntity {
         // In order to prevent the game from ending at that time, the first 8 collisions are invalidated.
         cnt++ > 8 ? this.TakeDamage(1000) : {};
 
-        // this.TakeDamage(1000);
       }
     }
 
@@ -184,7 +177,7 @@ class PlayerEntity {
       location.reload();
     }
 
-    // 미션 완료시 아래 코드로 성공여부 수정
+    // When the mission is completed, use the code below to correct the success
     // document.getElementById('scoreText').innerText = 'SUCCESS';
 
     scoreText.id = 'scoreText';
@@ -273,7 +266,6 @@ class ProceduralTerrain_Demo extends game.Game {
     this._userCamera.position.set(4100, 0, 0);
     
     this._graphics.Camera.position.set(4000, 400, 4450);
-    // this._graphics.Camera.quaternion.set(-0.032, 0.885, 0.062, 0.46);
     this._graphics.Camera.quaternion.set(-0.032, 0.885, 0.062, 0.46);
 
     this._score = 0;
@@ -340,8 +332,6 @@ class ProceduralTerrain_Demo extends game.Game {
     // Create collision mesh
     var planeGeo = new THREE.PlaneGeometry( 10000, 10000, 100, 100 );
     var plane = new THREE.Mesh(	planeGeo, customMaterial );
-    // plane.rotation.x = -Math.PI / 2;
-    // plane.position.y = -100;
     plane.rotation.x = -Math.PI / 2;
     plane.position.x=8000;
     plane.position.y=-100;
@@ -349,14 +339,11 @@ class ProceduralTerrain_Demo extends game.Game {
     collidableMeshList.push(plane);
     this._graphics.Scene.add( plane );
 
-    // var waterGeo = new THREE.PlaneGeometry( 10000, 10000, 1, 1 );
     var iceTex = new THREE.ImageUtils.loadTexture( 'resources/ice.png' );
     iceTex.wrapS = iceTex.wrapT = THREE.RepeatWrapping;
     iceTex.repeat.set(5,5);
     var iceMat = new THREE.MeshBasicMaterial( {map: iceTex, transparent:true, opacity:0.40} );
     var ice = new THREE.Mesh(	planeGeo, iceMat );
-    // water.rotation.x = -Math.PI / 2;
-    // water.position.y = -50;
     ice.rotation.x = -Math.PI / 2;
     ice.position.x=8000;
     ice.position.y=-30;
@@ -371,7 +358,7 @@ class ProceduralTerrain_Demo extends game.Game {
     var wallMaterial = new THREE.MeshBasicMaterial( {color: 0x0000ff, opacity: 0, transparent: true} );
     var wireMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe:true } );
 
-    var bunkerGeometry = new THREE.CubeGeometry( 50, 50, 50, 1, 1, 1 );
+    var bunkerGeometry = new THREE.CubeGeometry( 10, 10, 10, 1, 1, 1 );
     var bunkerMaterial = new THREE.MeshBasicMaterial( {color: 0x0000ff, opacity: 0, transparent: true} );
     var bunkerMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe:true } );
 
@@ -386,18 +373,12 @@ class ProceduralTerrain_Demo extends game.Game {
     wall.material.opacity = 0;
     this._graphics.Scene.add(wall);
     collidableMeshList.push(wall);
-    // var wall = new THREE.Mesh(wallGeometry, wireMaterial);
-    // wall.position.set(8000,450,0);
-    // wall.rotation.y = 3.14159 / 2;
-    // wall.material.transparent = true;
-    // wall.material.opacity = 0.3;
-    // this._graphics.Scene.add(wall);
 
     var bunkerColliderMesh = new THREE.Mesh(bunkerGeometry, bunkerMaterial);
-    bunkerColliderMesh.position.set(11405,220,-508);
+    bunkerColliderMesh.position.set(11400,200,-500);
     bunkerColliderMesh.rotation.y = 3.14159 / 2;
-    // bunkerColliderMesh.material.transparent = true;
-    // bunkerColliderMesh.material.opacity = 0.3;
+    bunkerColliderMesh.material.transparent = true;
+    bunkerColliderMesh.material.opacity = 0;
     this._graphics.Scene.add(bunkerColliderMesh);
     collidableMeshList.push(bunkerColliderMesh);
 
@@ -408,7 +389,6 @@ class ProceduralTerrain_Demo extends game.Game {
     mountainWall.material.opacity = 0;
     this._graphics.Scene.add(mountainWall);
     collidableMeshList.push(mountainWall);
-
 
     loader.setPath('./resources/models/x-wing/');
     loader.load('scene.gltf', (gltf) => {
@@ -446,11 +426,8 @@ class ProceduralTerrain_Demo extends game.Game {
       obj.scene.traverse((c) => {
         if (c.isMesh) {
           const model = obj.scene.children[0];
-          model.scale.setScalar(20);
+          model.scale.setScalar(10);
           model.rotateZ(Math.PI / 2.0);
-          // model.position.x = 2000;
-          // model.position.y = -25;
-          // model.position.z = 0;
           this._library['target'] = model;
         }
 
@@ -468,11 +445,8 @@ class ProceduralTerrain_Demo extends game.Game {
       obj.scene.traverse((c) => {
         if (c.isMesh) {
           const model = obj.scene.children[0];
-          model.scale.setScalar(18);
+          model.scale.setScalar(8);
           model.rotateZ(Math.PI / 2.0);
-          // model.position.x = 2000;
-          // model.position.y = -25;
-          // model.position.z = 0;
           this._library['bunker'] = model;
         }
 
@@ -559,9 +533,42 @@ class ProceduralTerrain_Demo extends game.Game {
     }
   }
 
+  // Mission Success
   EnemyDied() {
     this._score++;
-    //document.getElementById('scoreText').innerText = this._score;
+    const guiDiv = document.createElement('div');
+    guiDiv.className = 'guiRoot guiBox';
+
+    const scoreDiv = document.createElement('div');
+    scoreDiv.className = 'vertical';
+
+    const scoreTitle = document.createElement('div');
+    scoreTitle.className = 'guiBigText';
+    scoreTitle.innerText = 'Mission';
+
+    const scoreText = document.createElement('div');
+    scoreText.className = 'guiSmallText';
+    scoreText.innerText = 'SUCCESS';
+
+    const retryButton = document.createElement('button');
+    retryButton.className = 'retryButton';
+    retryButton.innerText = 'Try again';
+    retryButton.onclick = function () {
+      location.reload();
+    }
+
+    scoreText.id = 'scoreText';
+
+    scoreDiv.appendChild(scoreTitle);
+    scoreDiv.appendChild(scoreText);
+
+    guiDiv.appendChild(scoreDiv);
+    guiDiv.appendChild(retryButton);
+    document.body.appendChild(guiDiv);
+
+    if (true) {
+      return;
+    }
   }
 
   _CreateGUI() {
