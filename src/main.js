@@ -375,6 +375,10 @@ class ProceduralTerrain_Demo extends game.Game {
     var bunkerMaterial = new THREE.MeshBasicMaterial( {color: 0x0000ff, opacity: 0, transparent: true} );
     var bunkerMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe:true } );
 
+    var mountainGeometry = new THREE.CubeGeometry( 10000, 50, 10000, 1, 1, 1 );
+    var mountainMaterial = new THREE.MeshBasicMaterial( {color: 0x0000ff, opacity: 0, transparent: true} );
+    var mountainMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe:false } );
+
    var wall = new THREE.Mesh(wallGeometry, wallMaterial);
     wall.position.set(5000,450,0);
     wall.rotation.y = 3.14159 / 2;
