@@ -39,6 +39,7 @@ class PlayerEntity {
     this._direction = new THREE.Vector3(0, 0, -1);
     this._health = 1000.0;
 
+    // MovingCube.position.set(this._model.position);
 
     const x = 2.75;
     const y1 = 1.5;
@@ -47,6 +48,8 @@ class PlayerEntity {
     this._offsets = [
         new THREE.Vector3(-x, y1, -z),
         new THREE.Vector3(x, y1, -z),
+        // new THREE.Vector3(-x, -y2, -z),
+        // new THREE.Vector3(x, -y2, -z),
     ];
 
     this._offsetIndex = 0;
@@ -78,11 +81,15 @@ class PlayerEntity {
     return this._health;
   }
 
+  set Health(value) {
+    this._health = value;
+  }
+
   get Dead() {
     return (this._health <= 0.0);
   }
 
-  // Destroy the object with TakeDamage when a collision is detected with the terrain
+  // 지형에 충돌이 감지되면 TakeDamage로 오브젝트 파괴 예정
   TakeDamage(dmg) {
     this._params.game._entities['_explosionSystem'].Splode(this.Position);
 
@@ -108,7 +115,7 @@ class PlayerEntity {
     p.Velocity = this.Direction.clone().multiplyScalar(500.0);
     p.Length = 50.0;
     p.Colours = [
-        new THREE.Color(4.0, 0.5, 0.5), new THREE.Color(0.0, 0.0, 0.0)];
+        new THREE.Color(4.0, 2.5, 0.5), new THREE.Color(0.0, 0.0, 0.0)];
     p.Life = 2.0;
     p.TotalLife = 2.0;
     p.Width = 0.25;
@@ -121,6 +128,14 @@ class PlayerEntity {
       return;
     }
 
+    // 속도가 증가하여 발포된 총알에 비행기 메쉬가 충돌판정되는 일이 생깁니다.
+    // 이를 막을 방법이 마땅치않아 게임오버되지 않게 초당 체력을 계속해서 회복시켜줍니다.
+    // 지형 충돌에 의한 파괴는 곧바로 체력이 0 이하로 떨어지기 때문에 막을 수 없습니다.
+    if(this.Health < 1000) {
+      this.Health = 1000;
+    }
+
+    // MovingCube.position.set(this._model.position);
     MovingCube.position.x = this._model.position.x;
     MovingCube.position.y = this._model.position.y + 1.5;
     MovingCube.position.z = this._model.position.z;
@@ -141,7 +156,8 @@ class PlayerEntity {
         console.log("collision detected");
         // Because it recognized the gltf model at first, number 8 is inevitably judged as a collision.
         // In order to prevent the game from ending at that time, the first 8 collisions are invalidated.
-        cnt++ > 8 ? this.TakeDamage(1000) : {};
+        // cnt++ > 8 ? this.TakeDamage(1111) : {};
+        this.TakeDamage(1111);
 
       }
     }
@@ -356,12 +372,17 @@ class ProceduralTerrain_Demo extends game.Game {
 
     var wallGeometry = new THREE.CubeGeometry( 10000, 20, 6000, 1, 1, 1 );
     var wallMaterial = new THREE.MeshBasicMaterial( {color: 0x0000ff, opacity: 0, transparent: true} );
+    var HorizontalGeometry = new THREE.CubeGeometry( 10000, 20, 6000, 1, 1, 1 );
+    var VerticalGeometry = new THREE.CubeGeometry( 15000, 20, 15000, 1, 1, 1 );
+    var wallMaterial = new THREE.MeshBasicMaterial( {color: 0x0000ff, opacity: 0.3, transparent: true} );
     var wireMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe:true } );
 
     var bunkerGeometry = new THREE.CubeGeometry( 10, 10, 10, 1, 1, 1 );
+    var bunkerGeometry = new THREE.CubeGeometry( 30, 30, 30, 1, 1, 1 );
     var bunkerMaterial = new THREE.MeshBasicMaterial( {color: 0x0000ff, opacity: 0, transparent: true} );
     var bunkerMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe:true } );
 
+   var wall = new THREE.Mesh(HorizontalGeometry, wallMaterial);
     var mountainGeometry = new THREE.CubeGeometry( 10000, 50, 10000, 1, 1, 1 );
     var mountainMaterial = new THREE.MeshBasicMaterial( {color: 0x0000ff, opacity: 0, transparent: true} );
     var mountainMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe:false } );
@@ -373,6 +394,45 @@ class ProceduralTerrain_Demo extends game.Game {
     wall.material.opacity = 0;
     this._graphics.Scene.add(wall);
     collidableMeshList.push(wall);
+
+    var wall2 = new THREE.Mesh(VerticalGeometry, wallMaterial);
+    wall2.position.set(10000,450,5000);
+    wall2.rotation.x = 3.14159 / 2;
+    wall2.material.transparent = true;
+    wall2.material.opacity = 0.3;
+    this._graphics.Scene.add(wall2);
+    collidableMeshList.push(wall2);
+
+    var wall3 = new THREE.Mesh(VerticalGeometry, wallMaterial);
+    wall3.position.set(10000,450,-5000);
+    wall3.rotation.x = 3.14159 / 2;
+    wall3.material.transparent = true;
+    wall3.material.opacity = 0.3;
+    this._graphics.Scene.add(wall3);
+    collidableMeshList.push(wall3);
+
+    var wall4 = new THREE.Mesh(VerticalGeometry, wallMaterial);
+    wall4.position.set(13500,450,0);
+    wall4.rotation.z = 3.14159 / 2;
+    wall4.material.transparent = true;
+    wall4.material.opacity = 0.3;
+    this._graphics.Scene.add(wall4);
+    collidableMeshList.push(wall4);
+
+    var wall5 = new THREE.Mesh(VerticalGeometry, wallMaterial);
+    wall5.position.set(-100,450,0);
+    wall5.rotation.z = 3.14159 / 2;
+    wall5.material.transparent = true;
+    wall5.material.opacity = 0.3;
+    this._graphics.Scene.add(wall5);
+    collidableMeshList.push(wall5);
+
+    // var wall = new THREE.Mesh(wallGeometry, wireMaterial);
+    // wall.position.set(8000,450,0);
+    // wall.rotation.y = 3.14159 / 2;
+    // wall.material.transparent = true;
+    // wall.material.opacity = 0.3;
+    // this._graphics.Scene.add(wall);
 
     var bunkerColliderMesh = new THREE.Mesh(bunkerGeometry, bunkerMaterial);
     bunkerColliderMesh.position.set(11400,200,-500);

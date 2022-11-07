@@ -127,6 +127,7 @@ void main() {
 
               p.Alive = false;
               candidate.TakeDamage(100.0);
+              console.log("하이 데얼");
               break;
             }
           }
